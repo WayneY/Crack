@@ -1,0 +1,31 @@
+#!/usr/bin/perl
+##
+## Oh, shit! It is only a simple Dec->Hex!!
+##
+use 5.010;
+my $machinecode = shift @ARGV;
+#die "machinecode Error!" unless $machinecode =~ m/\d+/；
+my $iterator;
+my @keylist;
+my $x;
+foreach (split //,$machinecode){
+   $x = $x * 0xA + $_; 
+   $iterator = $iterator + 1;
+   if ($iterator == 4){
+       $iterator = 0;
+       push @keylist,$x;
+       $x = 0;
+    }
+}
+
+$keylist[1] = $keylist[1] + 0x83E;
+$keylist[2] = $keylist[2] + 0x6E;
+
+foreach (@keylist){
+    $_ = sprintf("%x",$_);
+}
+
+$keylist[0] = uc 'T'.'0'x(4-(split //, $keylist[0])).$keylist[0];
+$keylist[1] = uc '-Y'.'0'x(5-(split //, $keylist[1])).$keylist[1];
+$keylist[2] = uc '-'.'0'x(4-(split //, $keylist[2])).$keylist[2];
+say @keylist;
