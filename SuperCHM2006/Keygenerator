@@ -1,0 +1,18 @@
+#!/usr/bin/perl
+##
+## Oh, shit! It is only a simple Dec->Hex!!
+##
+use 5.010;
+my $machinecode = shift @ARGV;
+die "machinecode Error! Only digit is valid." unless $machinecode =~ m/^\d+$/;
+my @keylist;
+foreach my $i (0,4,8){
+    push @keylist,map{$i==4?$_+0x83E:$i==8?$_+0x6E:$_} substr $machinecode,$i,4;
+}
+
+@keylist = map{sprintf("%x",$_)} @keylist;
+
+$keylist[0] = uc 'T'.'0'x(4-length $keylist[0]).$keylist[0];
+$keylist[1] = uc '-Y'.'0'x(5-length $keylist[1]).$keylist[1];
+$keylist[2] = uc '-'.'0'x(4-length $keylist[2]).$keylist[2];
+say @keylist;
