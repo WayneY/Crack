@@ -2,7 +2,6 @@
 use 5.016;
 
 my @inp = (split //, shift @ARGV);
-
 die "32 chars only. You now have ".scalar @inp unless scalar @inp == 32;
 
 my @orig = split //,'We go about our daily lives understanding almost nothing of the world. Few of us spend much time wondering why nature is the way it is; where the cosmos came from;... why we remember the past and not the future; and why there is a universe.';
@@ -11,13 +10,16 @@ my $ebx;
 foreach (@inp){
     $ebx += ord $_;
 }
+my $dl = $ebx & 0x1f;
 
 my @result;
 foreach (@orig){
-    my $dl = $ebx & 0x1f;
     my $crypt = ord($inp[$dl] ^ $_) + $dl ;
-    unshift @result, chr($crypt);
+#   push  @result, chr($crypt);
+    push @result, ($crypt);
     $dl = ($crypt+ $dl) & 0x1f;
 }
 
-say @result;
+#say @result;
+print sprintf("%x",$_)." " foreach @result;
+say "";
