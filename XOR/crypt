@@ -19,7 +19,7 @@ foreach (@orig){
     my $dl = $bl%32 & 0xff;
     my $crypt = ord($inp[$dl] ^ $_) + $dl ;
     unshift @result, chr($crypt);
-    $bl = ((ord $crypt)+ $dl) & 0xff;
+    $bl = ($crypt+ $dl) & 0xff;
 }
 
 say @result;
