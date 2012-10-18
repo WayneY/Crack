@@ -3,58 +3,25 @@ use 5.016;
 
 my $base = 'We go about our daily lives understanding almost nothing of the world. Few of us spend much time wondering why nature is the way it is; where the cosmos came from;... why we remember the past and not the future; and why there is a universe.';
 
-my @crypt = qw /87 2B 73 5A 30 20 5F 5F 27 39 1E 73 2E 64 5D 72 29 68 76 67 19 23 42 3C 1E 5C 3D 6D 48 78 37 37 5B 37 47 32 52 3A 76 69 65 64 20 2D 54 48 3D 39 60 2E 52 34 3B 6A 71 29 8D 2D 5A 6D 47 2B 41 6D 4A 38 24 6D 29 66 72 07 5E 6B 20 5D 57 24 1B 45 68 71 60 55 37 55 70 6E 3A 4C 4F 64 35 29 33 49 73 6A 5D 5F 37 37 5B 1D 6F 57 60 35 61 19 23 44 31 39 33 3B 5C 70 6A 5C 60 34 3B 5E 14 36 60 68 76 60 65 31 2B 23 24 64 36 59 2B 25 23 77 65 2E 59 7E 4C 25 6A 33 43 6A 76 5A 62 64 54 10 69 5B 23 2B 7D 6F 1B 84 72 38 28 46 17 28 59 7E 5B 3B 6E 2A 41 4B 2E 56 09 46 61 49 73 67 58 67 47 73 58 3C 4D 23 44 27 38 19 6B 77 2B 73 59 38 2A 65 65 50 70 8D 1F 34 51 0D 5E 6B 5A 73 39 28 2A 40 49 73 50 24 09 33 71 4E 22 2F 69 64 25 31 6C 62 00 4E 69 63 65 20 6F 6E 65 21 00 68 55 19 2D 17/;                                             
+my @crypt = qw /87 2B 73 5A 30 20 5F 5F 27 39 1E 73 2E 64 5D 72 29 68 76 67 19 23 42 3C 1E 5C 3D 6D 48 78 37 37 5B 37 47 32 52 3A 76 69 65 64 20 2D 54 48 3D 39 60 2E 52 34 3B 6A 71 29 8D 2D 5A 6D 47 2B 41 6D 4A 38 24 6D 29 66 72 07 5E 6B 20 5D 57 24 1B 45 68 71 60 55 37 55 70 6E 3A 4C 4F 64 35 29 33 49 73 6A 5D 5F 37 37 5B 1D 6F 57 60 35 61 19 23 44 31 39 33 3B 5C 70 6A 5C 60 34 3B 5E 14 36 60 68 76 60 65 31 2B 23 24 64 36 59 2B 25 23 77 65 2E 59 7E 4C 25 6A 33 43 6A 76 5A 62 64 54 10 69 5B 23 2B 7D 6F 1B 84 72 38 28 46 17 28 59 7E 5B 3B 6E 2A 41 4B 2E 56 09 46 61 49 73 67 58 67 47 73 58 3C 4D 23 44 27 38 19 6B 77 2B 73 59 38 2A 65 65 50 70 8D 1F 34 51 0D 5E 6B 5A 73 39 28 2A 40 49 73 50 24 09 33 71 4E 22 2F 69 64 25 31 6C 62/;
+
 
 my @orig = split(//,$base);
 
-
-#my $inputstring = shift @ARGV;
-#my @inp = (split //,$inputstring);
-my @inp;
-
-#die "32 chars only you only have ".scalar @inp  unless scalar @inp==32;
-
-my $ebx;
-#foreach (@inp){
-#    $ebx += ord $_;
-#}
-
-#my $bl = ($ebx & oxff);
-
-my @result;
-#foreach (@orig){
-#  my $dl = $bl%32;
-#  my $mi = $inp[$dl] ^ $_;
-#  $mi = (ord $mi)+ $dl;
-#  unshift @result, $mi;
-#  $bl = (((ord $mi) + $dl) & 0xff);
-#}
-
-#say @result;
-
-
-
-
-foreach (0..$#crypt){
-    unshift @result, sprintf("%x",(ord $orig[$_])^hex($crypt[$_]));
+foreach (reverse (0..31)){
+ my @inp=();
+ my $dl = $_; #Assume
+# $dl = 8; #test;
+ say sprintf("%x",$dl);
+ foreach (0..$#orig){
+     next if defined($inp[$dl]) && $inp[$dl] != (((ord $orig[$_]) ^  (hex($crypt[$_])-$dl)) & 0xff);
+     $inp[$dl] = ((ord $orig[$_]) ^  (hex($crypt[$_])-$dl)) & 0xff;
+     $dl = (hex($crypt[$_]) + $dl) & 0x1f;
+ }
+ next if scalar @inp !=32;
+ foreach (@inp){
+    #print sprintf("%x",$_)."\t";
+    print chr($_);
+ }
+ print "\n\n";
 }
-
-foreach (@result){
-        $num += hex($_);
-}
-say $num;
-$num = ($num & 0xff);
-say $num;
-foreach (0..$#crypt){
-      my $mi = ((ord $orig[$_]) ^ hex($crypt[$_]));
-        $inp[$num%32] = chr($mi);
-          $num = (( hex($crypt[$_]) + ($num%32)) & 0xff);
-}
-
-say @inp;
-
-#say sprintf("%x",'W'^hex(87));
-#say sprintf("%x",(ord 'W')^hex(87));
-#say sprintf("%x",hex(57)^hex(87));
-
-
