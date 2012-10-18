@@ -12,14 +12,12 @@ foreach (@inp){
     $ebx += ord $_;
 }
 
-my $bl = ($ebx & 0xff );
-
 my @result;
 foreach (@orig){
-    my $dl = $bl%32 & 0xff;
+    my $dl = $ebx & 0x1f;
     my $crypt = ord($inp[$dl] ^ $_) + $dl ;
     unshift @result, chr($crypt);
-    $bl = ($crypt+ $dl) & 0xff;
+    $dl = ($crypt+ $dl) & 0x1f;
 }
 
 say @result;
