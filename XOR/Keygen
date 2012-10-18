@@ -8,20 +8,20 @@ my @crypt = qw /87 2B 73 5A 30 20 5F 5F 27 39 1E 73 2E 64 5D 72 29 68 76 67 19 2
 
 my @orig = split(//,$base);
 
-foreach (reverse (0..31)){
+foreach (0..31){
  my @inp=();
  my $dl = $_; #Assume
-# $dl = 8; #test;
- say sprintf("%x",$dl);
  foreach (0..$#orig){
-     next if defined($inp[$dl]) && $inp[$dl] != (((ord $orig[$_]) ^  (hex($crypt[$_])-$dl)) & 0xff);
-     $inp[$dl] = ((ord $orig[$_]) ^  (hex($crypt[$_])-$dl)) & 0xff;
+     my $element = ((ord $orig[$_]) ^  (hex($crypt[$_])-$dl)) & 0xff; 
+     next if ($element < 31 || $element>127);
+     next if defined($inp[$dl]) && $inp[$dl] != $element;
+     $inp[$dl] = $element;
      $dl = (hex($crypt[$_]) + $dl) & 0x1f;
  }
- next if scalar @inp !=32;
+ next if scalar grep(defined $_,@inp) !=32;
+ say sprintf("%x",$_).":";
  foreach (@inp){
-    #print sprintf("%x",$_)."\t";
     print chr($_);
  }
- print "\n\n";
+ say "";
 }
