@@ -9,4 +9,4 @@ my crack practice and something interesting
 
  > crypt -- the crypt algorithm
 
- > Keygen -- not finished yet
+ > Keygen -- find the key. 
