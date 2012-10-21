@@ -1,0 +1,24 @@
+#!/usr/bin/perl
+use 5.016;
+
+my @orig = split //,'We go about our daily lives understanding almost nothing of the world. Few of us spend much time wondering why nature is the way it is; where the cosmos came from;... why we remember the past and not the future; and why there is a universe.';
+
+my @crypt = qw /87 2B 73 5A 30 20 5F 5F 27 39 1E 73 2E 64 5D 72 29 68 76 67 19 23 42 3C 1E 5C 3D 6D 48 78 37 37 5B 37 47 32 52 3A 76 69 65 64 20 2D 54 48 3D 39 60 2E 52 34 3B 6A 71 29 8D 2D 5A 6D 47 2B 41 6D 4A 38 24 6D 29 66 72 07 5E 6B 20 5D 57 24 1B 45 68 71 60 55 37 55 70 6E 3A 4C 4F 64 35 29 33 49 73 6A 5D 5F 37 37 5B 1D 6F 57 60 35 61 19 23 44 31 39 33 3B 5C 70 6A 5C 60 34 3B 5E 14 36 60 68 76 60 65 31 2B 23 24 64 36 59 2B 25 23 77 65 2E 59 7E 4C 25 6A 33 43 6A 76 5A 62 64 54 10 69 5B 23 2B 7D 6F 1B 84 72 38 28 46 17 28 59 7E 5B 3B 6E 2A 41 4B 2E 56 09 46 61 49 73 67 58 67 47 73 58 3C 4D 23 44 27 38 19 6B 77 2B 73 59 38 2A 65 65 50 70 8D 1F 34 51 0D 5E 6B 5A 73 39 28 2A 40 49 73 50 24 09 33 71 4E 22 2F 69 64 25 31 6C 62/;
+
+foreach (0..31){
+ my @inp=();
+ my $dl = $_; #Assume
+ foreach (0..$#orig){
+     my $element = ((ord $orig[$_]) ^  (hex($crypt[$_])-$dl)) & 0xff; 
+     next if ($element < 31 || $element>127);   # The input string must can be seen.
+     next if defined($inp[$dl]) && $inp[$dl] != $element; 
+     $inp[$dl] = $element;
+     $dl = (hex($crypt[$_]) + $dl) & 0x1f;
+ }
+ next if scalar grep(defined $_,@inp) !=32;
+ say sprintf("%x",$_).":";
+ foreach (@inp){
+    print chr($_);
+ }
+ say "";
+}

@@ -2,7 +2,7 @@
 ##
 ## Oh, shit! It is only a simple Dec->Hex!!
 ##
-use 5.010;
+use 5.016;
 my $machinecode = shift @ARGV;
 die "machinecode Error! Only digit is valid." unless $machinecode =~ m/^\d+$/;
 my @keylist;
